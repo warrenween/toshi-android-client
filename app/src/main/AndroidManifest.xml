@@ -107,6 +107,7 @@
         <activity android:name="com.toshi.view.activity.GroupParticipantsActivity"/>
         <activity android:name="com.toshi.view.activity.GroupSetupActivity"/>
         <activity android:name="com.toshi.view.activity.BrowseActivity"/>
+        <activity android:name="com.toshi.view.activity.DevelopActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

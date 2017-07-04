@@ -263,4 +263,5 @@
     <string name="error__group_creation">Unable to create group</string>
     <string name="qr_code_message">Use this QR code to let others add you on Toshi.</string>
     <string name="qr_code_sub_title">Profile QR COde</string>
+    <string name="develop">Develop</string>
 </resources>

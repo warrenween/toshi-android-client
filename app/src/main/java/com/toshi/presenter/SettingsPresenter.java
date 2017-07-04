@@ -37,6 +37,7 @@ import com.toshi.view.activity.AboutActivity;
 import com.toshi.view.activity.BackupPhraseInfoActivity;
 import com.toshi.view.activity.CurrencyActivity;
 import com.toshi.view.activity.DepositActivity;
+import com.toshi.view.activity.DevelopActivity;
 import com.toshi.view.activity.QrCodeActivity;
 import com.toshi.view.activity.SignOutActivity;
 import com.toshi.view.activity.TransactionOverviewActivity;
@@ -163,8 +164,11 @@ public final class SettingsPresenter implements
                 break;
             }
             case SettingsAdapter.TRANSACTIONS: {
-                final Intent intent = new Intent(this.fragment.getContext(), TransactionOverviewActivity.class);
-                this.fragment.getContext().startActivity(intent);
+                goToTransactionActivity();
+                break;
+            }
+            case SettingsAdapter.DEVELOP: {
+                goToDevelopActivity();
                 break;
             }
             case SettingsAdapter.SIGN_OUT: {
@@ -180,6 +184,16 @@ public final class SettingsPresenter implements
     private void goToCurrencyActivity() {
         final Intent intent = new Intent(this.fragment.getContext(), CurrencyActivity.class);
         this.fragment.startActivity(intent);
+    }
+
+    private void goToTransactionActivity() {
+        final Intent intent = new Intent(this.fragment.getContext(), TransactionOverviewActivity.class);
+        this.fragment.getContext().startActivity(intent);
+    }
+
+    private void goToDevelopActivity() {
+        final Intent intent = new Intent(this.fragment.getContext(), DevelopActivity.class);
+        this.fragment.getContext().startActivity(intent);
     }
 
     private void dialogHandler() {
