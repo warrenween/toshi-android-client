@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.toshi.exception.CurrencyException;
+import com.toshi.model.local.Network;
+import com.toshi.model.local.Networks;
 import com.toshi.view.BaseApplication;
 
 public class SharedPrefsUtil {
@@ -32,6 +34,7 @@ public class SharedPrefsUtil {
     private static final String LOCAL_CURRENCY_CODE = "localCurrencyCode";
     private static final String WAS_MIGRATED = "wasMigrated";
     private static final String FORCE_USER_UPDATE = "forceUserUpdate";
+    private static final String CURRENT_NETWORK = "currentNetwork";
 
     public static boolean hasOnboarded() {
         final SharedPreferences prefs = BaseApplication.get().getSharedPreferences(FileNames.USER_PREFS, Context.MODE_PRIVATE);
@@ -134,5 +137,18 @@ public class SharedPrefsUtil {
                 .putString(LOCAL_CURRENCY_CODE, null)
                 .putBoolean(WAS_MIGRATED, false)
                 .apply();
+    }
+
+    public static void setCurrentNetwork(final Network network) {
+        final SharedPreferences prefs = BaseApplication.get().getSharedPreferences(FileNames.USER_PREFS, Context.MODE_PRIVATE);
+        prefs.edit()
+                .putString(CURRENT_NETWORK, network.getId())
+                .apply();
+    }
+
+    public static Network getCurrentNetwork() {
+        final SharedPreferences prefs = BaseApplication.get().getSharedPreferences(FileNames.USER_PREFS, Context.MODE_PRIVATE);
+        final @Networks.Type String networkId = prefs.getString(CURRENT_NETWORK, Networks.getDefaultNetwork());
+        return Networks.getInstance().getNetworkById(networkId);
     }
 }
