@@ -271,4 +271,6 @@
     <string name="network_dialog_title">Change network?</string>
     <string name="network_dialog_message">Your contacts, apps, balance, and profile are linked to the blockchain. Changing blockchains will cause them to be different</string>
     <string name="network_default_name">Ropsten Revival Testnet</string>
+    <string name="network_changed">Networked changed</string>
+    <string name="network_change_error">Error during changing network</string>
 </resources>

@@ -46,15 +46,20 @@ import com.toshi.view.BaseApplication;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
+import rx.Observable;
 import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 public class RegistrationIntentService extends IntentService {
 
     public static final String FORCE_UPDATE = "update_token";
+    public static final String ETH_REGISTRATION_ONLY = "eth_registration_only";
+
     public static final String CHAT_SERVICE_SENT_TOKEN_TO_SERVER = "chatServiceSentTokenToServer";
     public static final String ETH_SERVICE_SENT_TOKEN_TO_SERVER = "sentTokenToServer_v2";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
+    private final static PublishSubject<Void> registrationSubject = PublishSubject.create();
     private final SharedPreferences sharedPreferences;
 
     public RegistrationIntentService() {
@@ -71,8 +76,13 @@ public class RegistrationIntentService extends IntentService {
             LogUtil.i(getClass(), "GCM Registration token: " + token);
 
             final boolean forceUpdate = intent.getBooleanExtra(FORCE_UPDATE, false);
-            registerEthereumServiceGcmToken(token, forceUpdate);
-            registerChatServiceGcm(token, forceUpdate);
+            final boolean ethRegistrationOnly = intent.getBooleanExtra(ETH_REGISTRATION_ONLY, false);
+            if (ethRegistrationOnly) {
+                registerEthereumServiceGcmToken(token, forceUpdate);
+            } else {
+                registerEthereumServiceGcmToken(token, forceUpdate);
+                registerChatServiceGcm(token, forceUpdate);
+            }
         } catch (final Exception ex) {
             LogUtil.d(getClass(), "Failed to complete token refresh" + ex);
             sharedPreferences.edit().putBoolean(ETH_SERVICE_SENT_TOKEN_TO_SERVER, false).apply();
@@ -114,10 +124,16 @@ public class RegistrationIntentService extends IntentService {
 
     public void handleGcmSuccess(final Void unused) {
         this.sharedPreferences.edit().putBoolean(ETH_SERVICE_SENT_TOKEN_TO_SERVER, true).apply();
+        registrationSubject.onNext(unused);
     }
 
     public void handleGcmFailure(final Throwable error) {
         this.sharedPreferences.edit().putBoolean(ETH_SERVICE_SENT_TOKEN_TO_SERVER, false).apply();
         LogUtil.exception(getClass(), "Error while registering gcm", error);
+        registrationSubject.onError(error);
+    }
+
+    public static Observable<Void> getGcmRegistrationObservable() {
+        return registrationSubject.asObservable();
     }
 }

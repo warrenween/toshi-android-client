@@ -19,11 +19,14 @@ package com.toshi.manager;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.toshi.crypto.HDWallet;
 import com.toshi.manager.network.CurrencyService;
 import com.toshi.manager.network.EthereumService;
+import com.toshi.model.local.Network;
+import com.toshi.model.local.Networks;
 import com.toshi.model.network.Balance;
 import com.toshi.model.network.Currencies;
 import com.toshi.model.network.GcmDeregistration;
@@ -31,8 +34,10 @@ import com.toshi.model.network.GcmRegistration;
 import com.toshi.model.network.MarketRates;
 import com.toshi.model.network.ServerTime;
 import com.toshi.model.sofa.Payment;
+import com.toshi.service.RegistrationIntentService;
 import com.toshi.util.CurrencyUtil;
 import com.toshi.util.FileNames;
+import com.toshi.util.GcmUtil;
 import com.toshi.util.LogUtil;
 import com.toshi.util.SharedPrefsUtil;
 import com.toshi.view.BaseApplication;
@@ -42,6 +47,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import rx.Completable;
+import rx.Observable;
 import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -246,6 +252,45 @@ public class BalanceManager {
                 .edit()
                 .putString(LAST_KNOWN_BALANCE, balance.getUnconfirmedBalanceAsHex())
                 .apply();
+    }
+
+    //Don't unregister the default network
+    public Completable changeNetwork(final Network network) {
+        final boolean isDefaultNetwork = Networks.getDefaultNetwork().equals(SharedPrefsUtil.getCurrentNetwork().getId());
+        if (isDefaultNetwork) {
+            return changeEthBaseUrl(network)
+                    .andThen(registerEthGcm().first().toCompletable())
+                    .subscribeOn(Schedulers.io())
+                    .doOnCompleted(() -> SharedPrefsUtil.setCurrentNetwork(network));
+        }
+
+        return unregisterEthGcm()
+                .andThen(changeEthBaseUrl(network))
+                .andThen(registerEthGcm().first().toCompletable())
+                .subscribeOn(Schedulers.io())
+                .doOnCompleted(() -> SharedPrefsUtil.setCurrentNetwork(network));
+    }
+
+    private Observable<Void> registerEthGcm() {
+        final Intent intent = new Intent(BaseApplication.get(), RegistrationIntentService.class)
+                .putExtra(RegistrationIntentService.FORCE_UPDATE, true)
+                .putExtra(RegistrationIntentService.ETH_REGISTRATION_ONLY, true);
+        BaseApplication.get().startService(intent);
+        return RegistrationIntentService.getGcmRegistrationObservable();
+    }
+
+    private Completable unregisterEthGcm() {
+        return GcmUtil
+                .getGcmToken()
+                .flatMapCompletable(token ->
+                        BaseApplication
+                        .get()
+                        .getBalanceManager()
+                        .unregisterFromGcm(token));
+    }
+
+    private Completable changeEthBaseUrl(final Network network) {
+        return Completable.fromAction(() -> EthereumService.get().changeBaseUrl(network.getUrl()));
     }
 
     public void clear() {

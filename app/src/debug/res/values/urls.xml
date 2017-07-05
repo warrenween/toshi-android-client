@@ -28,4 +28,6 @@
     <string name="qr_code_pay_url">%1$s/%2$s\?value=%3$s&amp;memo=%4$s</string>
     <string name="qr_code_pay_url_without_memo">%1$s/%2$s\?value=%3$s</string>
     <string name="rcp_url">https://propsten.infura.io</string>
+
+    <string name="balance_url_testnet">https://ethereum.service.tokenbrowser.com</string>
 </resources>

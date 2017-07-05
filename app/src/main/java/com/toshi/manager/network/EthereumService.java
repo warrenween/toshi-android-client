@@ -19,14 +19,16 @@ package com.toshi.manager.network;
 
 
 import com.squareup.moshi.Moshi;
+import com.toshi.R;
 import com.toshi.manager.network.interceptor.LoggingInterceptor;
 import com.toshi.manager.network.interceptor.SigningInterceptor;
 import com.toshi.manager.network.interceptor.UserAgentInterceptor;
 import com.toshi.model.adapter.BigIntegerAdapter;
-import com.toshi.model.sofa.SofaMessage;
+import com.toshi.model.local.Network;
 import com.toshi.model.sofa.Payment;
 import com.toshi.model.sofa.SofaAdapters;
-import com.toshi.R;
+import com.toshi.model.sofa.SofaMessage;
+import com.toshi.util.SharedPrefsUtil;
 import com.toshi.view.BaseApplication;
 
 import okhttp3.OkHttpClient;
@@ -41,9 +43,11 @@ import rx.schedulers.Schedulers;
 
 public class EthereumService {
 
+    private String baseUrl;
+
     private static EthereumService instance;
 
-    private final EthereumInterface ethereumInterface;
+    private EthereumInterface ethereumInterface;
     private final OkHttpClient.Builder client;
 
     public static EthereumInterface getApi() {
@@ -62,25 +66,41 @@ public class EthereumService {
     }
 
     private EthereumService() {
-        final RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory
-                .createWithScheduler(Schedulers.io());
         this.client = new OkHttpClient.Builder();
 
         addUserAgentHeader();
         addSigningInterceptor();
         addLogging();
 
+        this.baseUrl = getBaseUrl();
+        this.ethereumInterface = buildEthereumInterface(this.baseUrl);
+    }
+
+    private String getBaseUrl() {
+        final Network network =  SharedPrefsUtil.getCurrentNetwork();
+        return network.getUrl();
+    }
+
+    public void changeBaseUrl(final String baseUrl) {
+        this.baseUrl = baseUrl;
+        this.ethereumInterface = buildEthereumInterface(this.baseUrl);
+    }
+
+    private EthereumInterface buildEthereumInterface(final String baseUrl) {
         final Moshi moshi = new Moshi.Builder()
-                                    .add(new BigIntegerAdapter())
-                                    .build();
+                .add(new BigIntegerAdapter())
+                .build();
+
+        final RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory
+                .createWithScheduler(Schedulers.io());
 
         final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseApplication.get().getResources().getString(R.string.balance_url))
+                .baseUrl(baseUrl)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(rxAdapter)
                 .client(this.client.build())
                 .build();
-        this.ethereumInterface = retrofit.create(EthereumInterface.class);
+        return retrofit.create(EthereumInterface.class);
     }
 
     private void addUserAgentHeader() {
