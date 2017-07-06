@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.toshi.R;
 import com.toshi.crypto.util.TypeConverter;
 import com.toshi.exception.CurrencyException;
+import com.toshi.model.local.Network;
 import com.toshi.util.CurrencyUtil;
 import com.toshi.util.EthUtil;
 import com.toshi.util.LocaleUtil;
@@ -85,6 +86,7 @@ public class AmountPresenter implements Presenter<AmountActivity> {
 
     private void initView() {
         initToolbar();
+        initNetworkView();
         updateEthAmount();
 
         this.activity.getBinding().amountInputView.setOnAmountClickedListener(this.amountClickedListener);
@@ -120,6 +122,11 @@ public class AmountPresenter implements Presenter<AmountActivity> {
 
         this.activity.getBinding().title.setText(title);
         this.activity.getBinding().closeButton.setOnClickListener(this.backButtonClickListener);
+    }
+
+    private void initNetworkView() {
+        final Network network = SharedPrefsUtil.getCurrentNetwork();
+        this.activity.getBinding().network.setText(network.getName());
     }
 
     private View.OnClickListener continueClickListener = new View.OnClickListener() {

@@ -38,6 +38,7 @@ import com.toshi.exception.PermissionException;
 import com.toshi.model.local.ActivityResultHolder;
 import com.toshi.model.local.Conversation;
 import com.toshi.model.local.Group;
+import com.toshi.model.local.Network;
 import com.toshi.model.local.PermissionResultHolder;
 import com.toshi.model.local.Recipient;
 import com.toshi.model.local.User;
@@ -57,6 +58,7 @@ import com.toshi.util.LogUtil;
 import com.toshi.util.OnSingleClickListener;
 import com.toshi.util.PaymentType;
 import com.toshi.util.PermissionUtil;
+import com.toshi.util.SharedPrefsUtil;
 import com.toshi.util.SoundManager;
 import com.toshi.view.Animation.SlideUpAnimator;
 import com.toshi.view.BaseApplication;
@@ -199,6 +201,7 @@ public final class ChatPresenter implements Presenter<ChatActivity> {
 
     private void initShortLivingObjects() {
         initChatNavigation();
+        initNetworkView();
         getWallet();
         initClickListeners();
         initLayoutManager();
@@ -211,6 +214,11 @@ public final class ChatPresenter implements Presenter<ChatActivity> {
 
     private void initChatNavigation() {
         this.chatNavigation = new ChatNavigation();
+    }
+
+    private void initNetworkView() {
+        final Network network = SharedPrefsUtil.getCurrentNetwork();
+        this.activity.getBinding().network.setText(network.getName());
     }
 
     private void getWallet() {

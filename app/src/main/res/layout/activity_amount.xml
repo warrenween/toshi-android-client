@@ -165,6 +165,17 @@
                     android:layout_height="52dp"
                     style="@style/FlatButton"
                     android:text="@string/continue_"/>
+
+                <TextView
+                    android:id="@+id/network"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:gravity="center"
+                    android:background="@color/file_avatar_background"
+                    style="@style/TextStyleMedium"
+                    android:textSize="14sp"
+                    android:textColor="@color/textColorContrast"
+                    tools:text="Active network: Mainnet"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

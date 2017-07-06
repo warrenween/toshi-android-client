@@ -23,12 +23,14 @@ import android.widget.Toast;
 
 import com.toshi.R;
 import com.toshi.crypto.util.TypeConverter;
+import com.toshi.model.local.Network;
 import com.toshi.model.local.User;
 import com.toshi.util.EthUtil;
 import com.toshi.util.ImageUtil;
 import com.toshi.util.LogUtil;
 import com.toshi.util.OnSingleClickListener;
 import com.toshi.util.PaymentType;
+import com.toshi.util.SharedPrefsUtil;
 import com.toshi.view.BaseApplication;
 import com.toshi.view.fragment.DialogFragment.PaymentConfirmationDialog;
 
@@ -70,10 +72,16 @@ public class PaymentRequestConfirmPresenter implements Presenter<PaymentConfirma
     }
 
     private void initShortLivingObjects() {
+        initNetworkView();
         initClickListeners();
         processBundleData();
         updateView();
         tryLoadUser();
+    }
+
+    private void initNetworkView() {
+        final Network network = SharedPrefsUtil.getCurrentNetwork();
+        this.view.getBinding().network.setText(network.getName());
     }
 
     private void initClickListeners() {

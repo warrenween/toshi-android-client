@@ -159,6 +159,17 @@
             android:layout_height="wrap_content"
             android:background="@color/windowBackground"/>
 
+        <TextView
+            android:id="@+id/network"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:background="@color/file_avatar_background"
+            style="@style/TextStyleMedium"
+            android:textSize="14sp"
+            android:textColor="@color/textColorContrast"
+            tools:text="Active network: Mainnet"/>
+
     </LinearLayout>
 
 </layout>
