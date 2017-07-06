@@ -24,12 +24,18 @@ import android.widget.TextView;
 import com.toshi.R;
 import com.toshi.model.local.ToshiEntity;
 import com.toshi.util.ImageUtil;
+import com.toshi.util.ScreenUtil;
 import com.toshi.view.adapter.listeners.OnItemClickListener;
 import com.toshi.view.custom.StarRatingView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HorizontalViewHolder<T extends ToshiEntity> extends RecyclerView.ViewHolder {
+
+    private static final double NUMBER_OF_PORTRAIT_APPS = 3.5;
+    private static final double NUMBER_OF_LANDSCAPE_APPS = 5.5;
+    private static final double MINIMAL_SCREEN_RATIO = 1.4;
+
     private TextView appLabel;
     private TextView appCategory;
     private StarRatingView ratingView;
@@ -45,6 +51,7 @@ public class HorizontalViewHolder<T extends ToshiEntity> extends RecyclerView.Vi
     }
 
     public HorizontalViewHolder setElement(final T elem) {
+        setAvatarSize();
         renderName(elem);
         loadImage(elem);
         return this;
@@ -53,6 +60,23 @@ public class HorizontalViewHolder<T extends ToshiEntity> extends RecyclerView.Vi
     private void renderName(final T elem) {
         this.appLabel.setText(elem.getDisplayName());
         this.ratingView.setStars(elem.getReputationScore());
+    }
+
+    private void setAvatarSize() {
+        final int avatarSize = getAvatarSize();
+        this.appImage.getLayoutParams().width = avatarSize;
+        this.appImage.getLayoutParams().height = avatarSize;
+        this.appImage.requestLayout();
+    }
+
+    private int getAvatarSize() {
+        final int screenWidth = ScreenUtil.getWidthOfScreen();
+        final int horizontalMargin = this.appImage.getContext().getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+        final double numberOfVisibleApps =
+                ScreenUtil.isPortrait() || ScreenUtil.getScreenRatio() < MINIMAL_SCREEN_RATIO
+                        ? NUMBER_OF_PORTRAIT_APPS
+                        : NUMBER_OF_LANDSCAPE_APPS;
+        return (int)(screenWidth / numberOfVisibleApps) - horizontalMargin;
     }
 
     private void loadImage(final T elem) {
