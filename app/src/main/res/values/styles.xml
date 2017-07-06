@@ -169,4 +169,8 @@
     <style name="SwitchStyle" parent="Base.Widget.AppCompat.CompoundButton.Switch">
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
+
+    <style name="RadioButtonStyle" parent="Base.Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
 </resources>

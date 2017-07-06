@@ -262,6 +262,13 @@
     <string name="dialog__migration_message">We have made changes to make Toshi compatible with other services - as a result your balance will appear to be reset. As this is only testnet ETH, you don\'t need to take any action. If you do want to recover your balance for any reason, you can read how to do it here: http://developers.tokenbrowser.com/page/migrating-your-token-wallet</string>
     <string name="error__group_creation">Unable to create group</string>
     <string name="qr_code_message">Use this QR code to let others add you on Toshi.</string>
-    <string name="qr_code_sub_title">Profile QR COde</string>
+    <string name="qr_code_sub_title">Profile QR Code</string>
     <string name="develop">Develop</string>
+    <string name="network">Network</string>
+    <string name="develop_message">Changing the network allows you to test developed apps without the risk of losing money. It’s recommended not to change these settings unless you are a developer.</string>
+    <string name="app_version">App version %s</string>
+    <string name="select_network">Select network</string>
+    <string name="network_dialog_title">Change network?</string>
+    <string name="network_dialog_message">Your contacts, apps, balance, and profile are linked to the blockchain. Changing blockchains will cause them to be different</string>
+    <string name="network_default_name">Ropsten Revival Testnet</string>
 </resources>

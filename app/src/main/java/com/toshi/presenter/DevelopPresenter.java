@@ -17,20 +17,85 @@
 
 package com.toshi.presenter;
 
+import android.app.Dialog;
+
+import com.toshi.BuildConfig;
+import com.toshi.R;
+import com.toshi.model.local.Network;
+import com.toshi.util.DialogUtil;
+import com.toshi.util.SharedPrefsUtil;
 import com.toshi.view.activity.DevelopActivity;
+import com.toshi.view.fragment.DialogFragment.NetworkSwitcherDialog;
 
 public class DevelopPresenter implements Presenter<DevelopActivity> {
 
     private DevelopActivity activity;
 
+    private Dialog infoDialog;
+    private NetworkSwitcherDialog networkDialog;
+
     @Override
     public void onViewAttached(DevelopActivity view) {
         this.activity = view;
+        initShortLivingObjects();
+    }
+
+    private void initShortLivingObjects() {
+        initCLickListeners();
+        setVersionCode();
+        setCurrentNetwork(SharedPrefsUtil.getCurrentNetwork());
+    }
+
+    private void initCLickListeners() {
+        this.activity.getBinding().closeButton.setOnClickListener(__ -> this.activity.finish());
+        this.activity.getBinding().networkWrapper.setOnClickListener(__ -> handleCurrentNetworkClicked());
+    }
+
+    private void handleCurrentNetworkClicked() {
+        this.infoDialog = DialogUtil.getBaseDialog(
+                this.activity,
+                R.string.network_dialog_title,
+                R.string.network_dialog_message,
+                R.string.continue_,
+                (dialog, which) -> showNetworkSwitchDialog()
+        ).show();
+    }
+
+    private void showNetworkSwitchDialog() {
+        this.networkDialog = NetworkSwitcherDialog.getInstance()
+                .setOnNetworkListener(this::handleNetworkSelected);
+        this.networkDialog.show(this.activity.getSupportFragmentManager(), NetworkSwitcherDialog.TAG);
+    }
+
+    private void handleNetworkSelected(final Network network) {
+        setCurrentNetwork(network);
+    }
+
+    private void setVersionCode() {
+        final String versionCode = this.activity.getString(R.string.app_version, String.valueOf(BuildConfig.VERSION_CODE));
+        this.activity.getBinding().versionCode.setText(versionCode);
+    }
+
+    private void setCurrentNetwork(final Network network) {
+        this.activity.getBinding().currentNetwork.setText(network.getName());
     }
 
     @Override
     public void onViewDetached() {
+        closeDialogs();
         this.activity = null;
+    }
+
+    private void closeDialogs() {
+        if (this.infoDialog != null) {
+            this.infoDialog.dismiss();
+            this.infoDialog = null;
+        }
+
+        if (this.networkDialog != null) {
+            this.networkDialog.dismiss();
+            this.networkDialog = null;
+        }
     }
 
     @Override

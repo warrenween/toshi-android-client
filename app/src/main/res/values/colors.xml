@@ -39,6 +39,7 @@
     <color name="textColorChatTertiary">#808080</color>
     <color name="textColorPaymentBody">#575757</color>
     <color name="subTitleTextColor">#79797C</color>
+    <color name="textColorBody">#1A1B1C</color>
 
     <color name="input_bg">#FFFFFF</color>
     <color name="balance_bar__bg">#FFFFFF</color>
