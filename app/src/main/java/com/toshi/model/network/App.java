@@ -32,6 +32,7 @@ public class App implements ToshiEntity {
     private String username;
     private String token_id;
     private Double reputation_score;
+    private Double average_rating;
     private int review_count;
     private boolean is_app;
 
@@ -44,6 +45,12 @@ public class App implements ToshiEntity {
     public Double getReputationScore() {
         if (this.reputation_score == null) return 0.0;
         return reputation_score;
+    }
+
+    @Override
+    public Double getAverageRating() {
+        if (this.average_rating == null) return 0.0;
+        return average_rating;
     }
 
     @Override

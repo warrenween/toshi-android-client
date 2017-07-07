@@ -72,7 +72,7 @@ public class ToshiEntityViewHolder<T extends ToshiEntity> extends RecyclerView.V
     private void setRatingView(final T elem) {
         if (elem instanceof App) {
             this.ratingWrapper.setVisibility(View.VISIBLE);
-            this.ratingView.setStars(elem.getReputationScore());
+            this.ratingView.setStars(elem.getAverageRating());
             final String reviewCount = BaseApplication.get().getString(R.string.parentheses, elem.getReviewCount());
             this.reviewCount.setText(reviewCount);
         } else if (elem instanceof User) {

@@ -5,6 +5,7 @@ public interface ToshiEntity {
     String getAvatar();
     String getDisplayName();
     Double getReputationScore();
+    Double getAverageRating();
     String getAbout();
     int getReviewCount();
 }

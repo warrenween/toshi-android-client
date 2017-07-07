@@ -18,17 +18,23 @@
 package com.toshi.model.network;
 
 public class ReputationScore {
-    private Double score;
-    private int count;
+    private Double reputation_score;
+    private Double average_rating;
+    private int review_count;
     private Stars stars;
 
-    public Double getScore() {
-        if (this.score == null) return 0.0;
-        return score;
+    public Double getReputationScore() {
+        if (this.reputation_score == null) return 0.0;
+        return reputation_score;
     }
 
-    public int getCount() {
-        return this.count;
+    public Double getAverageRating() {
+        if (this.average_rating == null) return 0.0;
+        return average_rating;
+    }
+
+    public int getReviewCount() {
+        return this.review_count;
     }
 
     public Stars getStars() {

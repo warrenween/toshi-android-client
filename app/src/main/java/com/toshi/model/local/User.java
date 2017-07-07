@@ -33,6 +33,7 @@ public class User extends RealmObject implements ToshiEntity {
     private String username;
     private long cacheTimestamp;
     private Double reputation_score;
+    private Double average_rating;
     private int review_count;
     private String about;
     private String avatar;
@@ -103,6 +104,12 @@ public class User extends RealmObject implements ToshiEntity {
     public Double getReputationScore() {
         if (this.reputation_score == null) return 0.0;
         return this.reputation_score;
+    }
+
+    @Override
+    public Double getAverageRating() {
+        if (this.average_rating == null) return 0.0;
+        return this.average_rating;
     }
 
     @Override

@@ -268,7 +268,7 @@ public final class SettingsPresenter implements
 
         this.fragment.getBinding().name.setText(this.localUser.getDisplayName());
         this.fragment.getBinding().username.setText(this.localUser.getUsername());
-        this.fragment.getBinding().ratingView.setStars(this.localUser.getReputationScore());
+        this.fragment.getBinding().ratingView.setStars(this.localUser.getAverageRating());
         final String reviewCount = this.fragment.getString(R.string.parentheses, this.localUser.getReviewCount());
         this.fragment.getBinding().numberOfRatings.setText(reviewCount);
         ImageUtil.load(this.localUser.getAvatar(), this.fragment.getBinding().avatar);
@@ -309,7 +309,7 @@ public final class SettingsPresenter implements
                                 this::handleFormattedLocalBalance,
                                 this::handleFormattedLocalBalanceError
                         );
-        
+
         this.subscriptions.add(getLocalBalanceSub);
     }
 

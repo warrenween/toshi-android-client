@@ -52,7 +52,7 @@ public class HorizontalViewHolder<T extends ToshiEntity> extends RecyclerView.Vi
 
     private void renderName(final T elem) {
         this.appLabel.setText(elem.getDisplayName());
-        this.ratingView.setStars(elem.getReputationScore());
+        this.ratingView.setStars(elem.getAverageRating());
     }
 
     private void loadImage(final T elem) {

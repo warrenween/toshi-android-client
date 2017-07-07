@@ -155,7 +155,7 @@ public class PaymentRequestConfirmPresenter implements Presenter<PaymentConfirma
         this.view.getBinding().username.setText(this.user.getUsername());
         final String reviewCount = BaseApplication.get().getString(R.string.parentheses, this.user.getReviewCount());
         this.view.getBinding().numberOfRatings.setText(reviewCount);
-        this.view.getBinding().ratingView.setStars(this.user.getReputationScore());
+        this.view.getBinding().ratingView.setStars(this.user.getAverageRating());
     }
 
     private void setPaymentAddress() {

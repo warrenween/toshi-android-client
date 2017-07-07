@@ -242,6 +242,13 @@ public class DbMigration implements RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 15) {
+            schema.get("User")
+                .addField("average_rating", Double.class);
+            oldVersion++;
+        }
+
     }
 
     @Override

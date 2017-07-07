@@ -154,11 +154,12 @@ public class ViewAppPresenter implements Presenter<ViewAppActivity> {
     }
 
     private void handleReputationResponse(final ReputationScore reputationScore) {
-        final int repCount = reputationScore.getCount();
-        final String ratingText = this.activity.getResources().getQuantityString(R.plurals.ratings, repCount, repCount);
+        final int revCount = reputationScore.getReviewCount();
+        final String ratingText = this.activity.getResources().getQuantityString(R.plurals.ratings, revCount, revCount);
         this.activity.getBinding().reviewCount.setText(ratingText);
-        this.activity.getBinding().ratingView.setStars(reputationScore.getScore());
-        this.activity.getBinding().reputationScore.setText(String.valueOf(reputationScore.getScore()));
+        this.activity.getBinding().ratingView.setStars(reputationScore.getAverageRating());
+        // NOTE: design has decided that rating should be showed here instead of reputation score for now
+        this.activity.getBinding().reputationScore.setText(String.valueOf(reputationScore.getAverageRating()));
         this.activity.getBinding().ratingInfo.setRatingInfo(reputationScore);
     }
 

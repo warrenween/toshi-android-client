@@ -54,7 +54,7 @@ public class RatingInfoAdapter extends RecyclerView.Adapter<RatingInfoViewHolder
         }
 
         final double rating = this.reputationScore.getStars().getAmountOfOneStarRatings(stars);
-        final int ratingPercentage = (int)((rating / this.reputationScore.getCount()) * 100);
+        final int ratingPercentage = (int)((rating / this.reputationScore.getReviewCount()) * 100);
         holder.setPercentageRating(ratingPercentage);
     }
 
